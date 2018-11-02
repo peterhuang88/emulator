@@ -1,3 +1,9 @@
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.file.Files;
+
 public class CPU {
     final char[] chip8_fontset =
     {
@@ -65,11 +71,46 @@ public class CPU {
             V[i] = 0;
         }
 
+        // init and clear memory
+        memory = new char[4096];
+        for (int i = 0; i < 4096; i++) {
+            memory[i] = 0;
+        }
+
         // load that fontset
+        for (int i = 0; i < 80; i++) {
+            memory[i] = chip8_fontset[i];
+        }
 
-
-
-
+        // TODO: reset timers
     }
 
+    public void loadProgram(String filename) throws IOException {
+        File file = new File(filename);
+
+        // load file in binary mode to a byte array buffer
+        byte[] b = new byte[(int)file.length()];
+        try {
+            FileInputStream fileInputStream = new FileInputStream(file);
+            fileInputStream.read(b);
+            for (int i = 0; i < b.length; i++) {
+                System.out.print((char)b[i]);
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("File Not Found.");
+            e.printStackTrace();
+        } catch (IOException e1) {
+            System.out.println("Error Reading The File.");
+            e1.printStackTrace();
+        }
+
+        // load program from buffer into memory
+        for (int i = 0; i < b.length; i++) {
+            memory[i + 512] = (char)b[i];
+        }
+    }
+
+    public void emulateCycle() {
+        
+    }
 }
