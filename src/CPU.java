@@ -65,6 +65,7 @@ public class CPU {
             V[i] = 0;
         }
 
+        // load that fontset
 
 
 
